@@ -1,0 +1,90 @@
+# ============================================================================
+# Terraform
+# ============================================================================
+
+# Terraform working directory
+.terraform/
+**/.terraform/*
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Terraform plan files
+*.tfplan
+
+
+# ============================================================================
+# Sensitive Variables & Secrets
+# ============================================================================
+
+# Terraform variable files containing secrets
+*.tfvars
+*.tfvars.json
+
+# Allow example/template variables file
+!terraform.tfvars.example
+
+# Environment variables
+.env
+.env.*
+
+
+# ============================================================================
+# Private Keys & Certificates
+# ============================================================================
+
+# Private keys and certificates
+*.pem
+*.key
+*.pfx
+*.cer
+
+# SSH private keys
+id_rsa
+id_ed25519
+
+
+# ============================================================================
+# Azure CLI & Authentication
+# ============================================================================
+
+.azure/
+azureauth.json
+azure_credentials.json
+*.publishsettings
+
+
+# ============================================================================
+# OS & Editor Files
+# ============================================================================
+
+# Windows
+Thumbs.db
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# IntelliJ / JetBrains
+.idea/
+
+# Temporary editor files
+*.swp
+*.swo
+
+
+# ============================================================================
+# Logs & Temporary Files
+# ============================================================================
+
+crash.log
+crash.*.log
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
