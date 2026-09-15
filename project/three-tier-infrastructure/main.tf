@@ -53,3 +53,8 @@ module "bstn" {
   source     = "../child-modules/azure-bastion"
   test11     = var.set11
 }
+
+module "strg" {
+  source = "../child-modules/storage-account"
+  test14 = var.set14
+}
