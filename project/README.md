@@ -86,6 +86,10 @@ project/
 
 🚀 Deployment
 
+Copy the example variables file and provide your own values:
+
+cp terraform.tfvars.example terraform.tfvars
+
 az login
 terraform init
 terraform fmt -recursive
