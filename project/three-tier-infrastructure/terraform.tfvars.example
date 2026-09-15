@@ -1,0 +1,232 @@
+set1 = {
+  rgs1 = {
+    name     = "rg-prott"
+    location = "eastus"
+  }
+}
+
+set2 = {
+  vnnet1 = {
+    vnet_name           = "prott-network"
+    location            = "eastus"
+    resource_group_name = "rg-prott"
+    address_space       = ["10.0.0.0/16"]
+  }
+}
+
+set3 = {
+  subnn1 = {
+    sub_name             = "prott1databasesubnet"
+    resource_group_name  = "rg-prott"
+    virtual_network_name = "prott-network"
+    address_prefixes     = ["10.0.1.0/26"]
+  }
+  subnn2 = {
+    sub_name             = "prott2frontendsubnet"
+    resource_group_name  = "rg-prott"
+    virtual_network_name = "prott-network"
+    address_prefixes     = ["10.0.2.0/24"]
+  }
+  subnn3 = {
+    sub_name             = "prott3backendsubnet"
+    resource_group_name  = "rg-prott"
+    virtual_network_name = "prott-network"
+    address_prefixes     = ["10.0.3.0/24"]
+  }
+  subnn4 = {
+    sub_name             = "azurebastionsubnet"
+    resource_group_name  = "rg-prott"
+    virtual_network_name = "prott-network"
+    address_prefixes     = ["10.0.4.0/26"]
+  }
+}
+
+set4 = {
+  nsgg1 = {
+    network_security_name = "acceptanceTestSecurityGroup1"
+    resource_group_name   = "rg-prott"
+    location              = "West US"
+
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "*"
+  }
+  nsgg2 = {
+    network_security_name = "acceptanceTestSecurityGroup2"
+    resource_group_name   = "rg-prott"
+    location              = "West US"
+
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "10.0.1.0/24"
+    destination_address_prefix = "*"
+  }
+  nsgg3 = {
+    network_security_name      = "acceptanceTestSecurityGroup3"
+    resource_group_name        = "rg-prott"
+    location                   = "West US"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "5432"
+    source_address_prefix      = "10.0.2.0/24"
+    destination_address_prefix = "*"
+  }
+
+}
+
+set5 = {
+  natt = {
+
+    nat_name                = "nat-3tier-app"
+    location                = "westus"
+    resource_group_name     = "rg-prott"
+    sku_name                = "Standard"
+    idle_timeout_in_minutes = 10
+    zones                   = ["1"]
+  }
+}
+
+set6 = {
+  vmss = {
+    vmss_name              = "vmss-3tier-app"
+    resource_group_name    = "rg-prott"
+    location               = "westus"
+    sku                    = "Standard_D2s_v5"
+    instances              = 2
+    admin_username         = "azureadmin"
+    public_key             = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICoymJ6KWGIH750ot909X1tXQtr7bQTUhwGdavgbesLd azure-vmss"
+    publisher              = "Canonical"
+    offer                  = "ubuntu-24_04-lts"
+    image_sku              = "server"
+    version                = "latest"
+    storage_account_type   = "Standard_LRS"
+    caching                = "ReadWrite"
+    network_interface_name = "vmss-nic"
+  }
+}
+
+set7 = {
+  keyv = {
+    key_vault_name             = "imptierkeyvault"
+    resource_group_name        = "rg-prott"
+    location                   = "West US"
+    sku_name                   = "premium"
+    soft_delete_retention_days = 7
+
+    # VM credentials
+    vm_admin_username = "exampleusername"
+    vm_admin_password = "examplepassword"
+
+    # Database credentials
+    db_admin_username = "exampleusername"
+    db_admin_password = "examplepassword"
+  }
+}
+
+set8 = {
+  lganl = {
+    workspace_name      = "example-law"
+    resource_group_name = "rg-prott"
+    location            = "West US"
+    sku                 = "PerGB2018"
+    retention_in_days   = 30
+
+    diagnostic_setting_name = "diag-appgw"
+
+  }
+}
+
+
+set9 = {
+  datab = {
+    server_name         = "example-psqlflexibleserver"
+    resource_group_name = "rg-prott"
+    location            = "West US"
+
+    version = "16"
+
+    administrator_login    = "exampleid"
+    administrator_password = "examplepassword"
+
+    zone = "1"
+
+    storage_mb   = 32768
+    storage_tier = "P4"
+
+    sku_name = "B_Standard_B1ms"
+
+    database_name = "appdb"
+
+  }
+}
+
+
+set10 = {
+  appg = {
+
+    public_ip_name    = "appgateway-pip"
+    allocation_method = "Static"
+    sku_name1         = "Standard"
+
+    application_gateway_name = "appgw-3tier-app"
+
+    resource_group_name = "rg-prott"
+    location            = "West US"
+
+    sku_name = "Standard_v2"
+    sku_tier = "Standard_v2"
+    capacity = 2
+
+    gateway_ip_configuration_name = "my-gateway-ip-configuration"
+
+    frontend_port_name = "frontend-port"
+    frontend_port      = 80
+
+    frontend_ip_configuration_name = "frontend-ip"
+
+    backend_address_pool_name = "vmss-3tier-app"
+
+    http_setting_name = "vmss-http-setting"
+    backend_path      = "/"
+
+    listener_name = "appgateway-http-listener"
+
+    request_routing_rule_name = "appgateway-vmss-routing-rule"
+    priority                  = 100
+  }
+}
+
+
+
+set11 = {
+  bsttn = {
+    publicc_bastion_name   = "bastion-pip"
+    allocation_method_name = "Static"
+    sku_namee              = "Standard"
+    bastion_name           = "bastion-3tier-app"
+    location               = "West US"
+    resource_group_name    = "rg-prott"
+  }
+}
+
+set14 = {
+  strg = {
+     name                  = "datastorage"
+  resource_group_name      = "rg-prott"
+   location                 = "westus"
+  account_tier             = "standard"
+  account_replication_type = "GRS"
+  }
+}
